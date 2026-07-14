@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+
+  background:#fafafa;
+
+  color:#111;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+
+  min-height:100vh;
+}
+
+button{
+  cursor:pointer;
+}
+
+input,
+select,
+textarea{
+
+  outline:none;
+}
