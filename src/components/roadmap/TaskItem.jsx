@@ -1,53 +1,96 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 
-const TaskItem = ({ task, onToggle }) => {
-    return (
-        <motion.label
-            layout
-            initial={{
-                opacity: 0,
-                y: 8,
-            }}
-            animate={{
-                opacity: 1,
-                y: 0,
-            }}
-            exit={{
-                opacity: 0,
-                x: 50,
-            }}
-            transition={{
-                duration: 0.2,
-            }}
-            className="flex cursor-pointer items-center gap-4 rounded-xl border border-neutral-200 p-4 transition-all hover:border-neutral-300 hover:bg-neutral-50"
-        >
-            <input
-                type="checkbox"
-                checked={task.isCompleted}
-                onChange={onToggle}
-                className="hidden"
-            />
+const TaskItem = ({
+  task,
+  onToggle,
+  disabled = false,
+}) => {
+  return (
+    <motion.label
+      layout
+      initial={{
+        opacity: 0,
+        y: 6,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      transition={{
+        duration: 0.2,
+      }}
+      className={`
+        flex
+        cursor-pointer
+        items-start
+        gap-4
+        py-4
 
-            <div
-                className={`flex h-6 w-6 items-center justify-center rounded-md border transition-all ${task.isCompleted
-                        ? "border-black bg-black text-white"
-                        : "border-neutral-400"
-                    }`}
-            >
-                {task.isCompleted && <Check size={16} />}
-            </div>
+        border-b
+        border-zinc-800
 
-            <span
-                className={`flex-1 ${task.isCompleted
-                        ? "text-neutral-400 line-through"
-                        : ""
-                    }`}
-            >
-                {task.text}
-            </span>
-        </motion.label>
-    );
+        last:border-b-0
+
+        transition-colors
+
+        ${
+          disabled
+            ? "cursor-not-allowed opacity-60"
+            : "hover:bg-zinc-900/40"
+        }
+      `}
+    >
+      <input
+        type="checkbox"
+        checked={task.isCompleted}
+        disabled={disabled}
+        onChange={onToggle}
+        className="hidden"
+      />
+
+      <div
+        className={`
+          mt-0.5
+          flex
+          h-6
+          w-6
+          flex-shrink-0
+          items-center
+          justify-center
+          rounded-md
+          border
+          transition-all
+
+          ${
+            task.isCompleted
+              ? "border-green-500 bg-green-500 text-white"
+              : "border-zinc-600"
+          }
+        `}
+      >
+        {task.isCompleted && (
+          <Check size={16} />
+        )}
+      </div>
+
+      <span
+        className={`
+          flex-1
+          text-sm
+          leading-6
+
+          ${
+            task.isCompleted
+              ? "text-zinc-500 line-through"
+              : "text-zinc-200"
+          }
+        `}
+      >
+        {task.text}
+      </span>
+    </motion.label>
+  );
 };
 
 export default TaskItem;

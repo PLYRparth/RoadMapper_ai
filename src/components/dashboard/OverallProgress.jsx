@@ -1,9 +1,13 @@
 import Card from "../ui/Card";
+
 import {
     calculateOverallProgress,
 } from "../../utils/progress";
+import ProgressBar from "../ui/ProgressBar";
 
-const OverallProgress = ({roadmaps,}) => {
+const OverallProgress = ({
+    roadmaps,
+}) => {
 
     const stats =
         calculateOverallProgress(
@@ -11,32 +15,30 @@ const OverallProgress = ({roadmaps,}) => {
         );
 
     return (
-        <Card className="mb-8">
+        <Card className="mt-8">
 
-            <h2 className="mb-6 text-xl font-semibold">
 
-                Overall Progress
+            <ProgressBar
+                value={stats.progress}
+            />
 
-            </h2>
+            <div className="mt-8 grid grid-cols-3 gap-6 text-center">
 
-            <div className="mb-4 h-3 rounded-full bg-neutral-200">
+                <div>
 
-                <div
-                    className="h-3 rounded-full bg-black"
-                    style={{
-                        width: `${stats.progress}%`,
-                    }}
-                />
+                    <p className="text-3xl font-bold">
 
-            </div>
+                        {stats.progress}%
 
-            <div className="flex justify-between text-sm">
+                    </p>
 
-                <span>
+                    <p className="mt-2 text-sm text-zinc-500">
 
-                    {stats.progress}%
+                        Completed
 
-                </span>
+                    </p>
+
+                </div>
 
                 <span>
 
@@ -47,6 +49,14 @@ const OverallProgress = ({roadmaps,}) => {
                     {stats.totalTasks}
 
                     {" Tasks"}
+
+                </span>
+
+                <span>
+
+                    {roadmaps.length}
+
+                    {" Active Roadmaps"}
 
                 </span>
 

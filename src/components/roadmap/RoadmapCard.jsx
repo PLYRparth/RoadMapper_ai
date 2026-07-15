@@ -1,100 +1,197 @@
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import {
+  ChevronRight,
+  MoreVertical,
+  Trash2,
+  Archive,
+  Play,
+} from "lucide-react";
 
 import Card from "../ui/Card";
+import ProgressBar from "../ui/ProgressBar";
 
 import {
-    calculateRoadmapProgress,
+  calculateRoadmapProgress,
 } from "../../utils/progress";
 
+import {
+  archiveRoadmap,
+  deleteRoadmap,
+} from "../../utils/storage";
+
 const RoadmapCard = ({ roadmap }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const progress =
-        calculateRoadmapProgress(roadmap);
+  const [menuOpen, setMenuOpen] =
+    useState(false);
 
-    const currentDay =
-        roadmap.currentDayIndex + 1;
+  const progress =
+    calculateRoadmapProgress(roadmap);
 
-    const remainingDays =
-        roadmap.duration - roadmap.currentDayIndex;
+  const currentDay =
+    roadmap.currentDayIndex + 1;
 
-    return (
-        <motion.div
-            whileHover={{
-                y: -4,
-                transition: {
-                    duration: 0.2,
-                },
-            }}
-            whileTap={{
-                scale: 0.99,
-            }}
+  const remainingDays =
+    roadmap.duration -
+    roadmap.currentDayIndex;
+
+  const currentDayData =
+    roadmap.days[roadmap.currentDayIndex];
+
+  return (
+    <motion.div
+      whileHover={{
+        y: -4,
+      }}
+      transition={{
+        duration: 0.2,
+      }}
+    >
+      <Card
+        onClick={() =>
+          navigate(`/roadmap/${roadmap.id}`)
+        }
+        className="relative cursor-pointer"
+      >
+        {/* Menu */}
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setMenuOpen((prev) => !prev);
+          }}
+          className="absolute right-5 top-5 rounded-lg p-2 text-zinc-400 transition hover:bg-zinc-800 hover:text-white"
         >
-            <Card
-                onClick={() =>
-                    navigate(`/roadmap/${roadmap.id}`)
-                }
-                className="cursor-pointer transition-shadow hover:shadow-xl"
+          <MoreVertical size={18} />
+        </button>
+
+        {menuOpen && (
+          <div
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+            className="absolute right-5 top-14 z-20 w-48 overflow-hidden rounded-2xl border border-zinc-800 bg-[#18181B] shadow-2xl"
+          >
+            <button
+              onClick={() =>
+                navigate(
+                  `/roadmap/${roadmap.id}`
+                )
+              }
+              className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition hover:bg-zinc-800"
             >
-                <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold">
-                        {roadmap.goal}
-                    </h2>
+              <Play size={16} />
+              Open Roadmap
+            </button>
 
-                    <motion.div
-                        whileHover={{
-                            x: 5,
-                        }}
-                    >
-                        <ChevronRight />
-                    </motion.div>
-                </div>
+            <button
+              onClick={() => {
+                archiveRoadmap(
+                  roadmap.id
+                );
 
-                <div className="mb-5">
-                    <div className="mb-2 flex justify-between text-sm text-neutral-500">
-                        <span>Progress</span>
+                window.location.reload();
+              }}
+              className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition hover:bg-zinc-800"
+            >
+              <Archive size={16} />
+              Archive
+            </button>
 
-                        <span>{progress}%</span>
-                    </div>
+            <button
+              onClick={() => {
+                const confirmDelete =
+                  window.confirm(
+                    `Delete "${roadmap.goal}"?`
+                  );
 
-                    <div className="h-2 overflow-hidden rounded-full bg-neutral-200">
-                        <motion.div
-                            className="h-full rounded-full bg-black"
-                            initial={{
-                                width: 0,
-                            }}
-                            animate={{
-                                width: `${progress}%`,
-                            }}
-                            transition={{
-                                duration: 0.6,
-                            }}
-                        />
-                    </div>
-                </div>
+                if (!confirmDelete)
+                  return;
 
-                <div className="flex justify-between text-sm text-neutral-500">
-                    <div>
-                        <p>Current Day</p>
+                deleteRoadmap(
+                  roadmap.id
+                );
 
-                        <p className="mt-1 font-medium text-black">
-                            {currentDay} / {roadmap.duration}
-                        </p>
-                    </div>
+                window.location.reload();
+              }}
+              className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-red-400 transition hover:bg-red-500/10"
+            >
+              <Trash2 size={16} />
+              Delete
+            </button>
+          </div>
+        )}
 
-                    <div className="text-right">
-                        <p>Remaining</p>
+        {/* Header */}
 
-                        <p className="mt-1 font-medium text-black">
-                            {remainingDays} Days
-                        </p>
-                    </div>
-                </div>
-            </Card>
+        <div className="mb-6 pr-10">
+
+          <h2 className="text-xl font-semibold text-white">
+            {roadmap.goal}
+          </h2>
+
+          <p className="mt-2 text-sm text-zinc-400">
+            {currentDayData?.title}
+          </p>
+
+        </div>
+
+        {/* Progress */}
+
+        <div className="mb-6">
+
+          <ProgressBar
+            value={progress}
+          />
+
+        </div>
+
+        {/* Stats */}
+
+        <div className="flex items-center justify-between">
+
+          <div>
+
+            <p className="text-xs uppercase tracking-wide text-zinc-500">
+              Current Day
+            </p>
+
+            <p className="mt-1 text-lg font-semibold text-white">
+              {currentDay} / {roadmap.duration}
+            </p>
+
+          </div>
+
+          <div className="text-right">
+
+            <p className="text-xs uppercase tracking-wide text-zinc-500">
+              Remaining
+            </p>
+
+            <p className="mt-1 text-lg font-semibold text-white">
+              {remainingDays} Days
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* Footer */}
+
+        <motion.div
+          whileHover={{
+            x: 5,
+          }}
+          className="mt-6 flex justify-end text-zinc-500"
+        >
+          <ChevronRight size={22} />
         </motion.div>
-    );
+
+      </Card>
+    </motion.div>
+  );
 };
 
 export default RoadmapCard;

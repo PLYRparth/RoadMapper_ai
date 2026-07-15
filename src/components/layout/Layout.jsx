@@ -1,23 +1,18 @@
 import Navbar from "./Navbar";
 
 const Layout = ({ children }) => {
+  return (
+    <div className="min-h-screen bg-[#09090B] text-white">
 
-    return (
+      <main className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 xl:px-12">
+        <Navbar />
 
-        <>
+        {children}
 
-            <Navbar />
+      </main>
 
-            <main className="mx-auto max-w-6xl p-6">
-
-                {children}
-
-            </main>
-
-        </>
-
-    );
-
+    </div>
+  );
 };
 
 export default Layout;

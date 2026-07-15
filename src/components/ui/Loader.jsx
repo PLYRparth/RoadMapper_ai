@@ -1,87 +1,219 @@
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  CheckCircle2,
+  LoaderCircle,
+} from "lucide-react";
 
-const messages = [
-  "🤖 Understanding your goal...",
-  "📚 Planning your roadmap...",
-  "📝 Creating daily tasks...",
-  "🎯 Personalizing difficulty...",
-  "🚀 Finalizing roadmap..."
+const steps = [
+  "Understanding your goal",
+  "Planning milestones",
+  "Breaking goal into daily tasks",
+  "Preparing daily challenges",
+  "Finding learning resources",
+  "Optimizing roadmap",
+  "Finalizing roadmap",
 ];
 
-export default function Loader() {
-
-  const [step, setStep] = useState(0);
+const Loader = ({ completed = false }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [progress, setProgress] = useState(4);
 
   useEffect(() => {
+    const stepInterval = setInterval(() => {
+      setCurrentStep((prev) =>
+        prev < steps.length - 1 ? prev + 1 : prev
+      );
+    }, 2200);
 
-    const interval = setInterval(() => {
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 94) return prev;
 
-      setStep(prev => {
-
-        if(prev < messages.length - 1)
-          return prev + 1;
-
-        return prev;
-
+        return prev + Math.random() * 7;
       });
+    }, 650);
 
-    },1500);
+    return () => {
+      clearInterval(stepInterval);
+      clearInterval(progressInterval);
+    };
+  }, []);
 
-    return ()=>clearInterval(interval);
-
-  },[]);
+  useEffect(() => {
+    if (completed) {
+      setProgress(100);
+    }
+  }, [completed]);
 
   return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#09090B]">
 
-    <div className="flex flex-col items-center justify-center py-20">
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at top, rgba(59,130,246,.12), transparent 60%)",
+        }}
+      />
 
-      <h2 className="text-3xl font-bold mb-8">
+      <motion.div
+        initial={{
+          opacity: 0,
+          scale: 0.96,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        className="relative w-full max-w-xl rounded-3xl border border-zinc-800 bg-[#18181B] p-10 shadow-2xl"
+      >
 
-        Generating Roadmap
+        <div className="flex justify-center">
 
-      </h2>
+          {completed ? (
+            <CheckCircle2
+              size={52}
+              className="text-green-500"
+            />
+          ) : (
+            <LoaderCircle
+              size={52}
+              className="animate-spin"
+            />
+          )}
 
-      <div className="w-full max-w-md">
+        </div>
 
-        {messages.map((msg,index)=>(
+        <h1 className="mt-6 text-center text-3xl font-bold">
 
-          <div
-            key={msg}
-            className={`mb-4 transition-all duration-500 ${
-              index <= step
-                ? "opacity-100"
-                : "opacity-30"
-            }`}
-          >
+          {completed
+            ? "Roadmap Ready!"
+            : "Building your personalized roadmap"}
 
-            {msg}
+        </h1>
+
+        <p className="mt-3 text-center text-zinc-400">
+
+          This usually takes around 10–20 seconds.
+
+        </p>
+
+        <div className="mt-10">
+
+          <div className="h-3 overflow-hidden rounded-full bg-zinc-800">
+
+            <motion.div
+              animate={{
+                width: `${progress}%`,
+              }}
+              transition={{
+                duration: 0.4,
+              }}
+              className="h-full rounded-full bg-white"
+            />
 
           </div>
 
-        ))}
+          <div className="mt-2 text-right text-sm text-zinc-500">
 
-      </div>
+            {Math.min(
+              Math.round(progress),
+              100
+            )}
+            %
 
-      <div className="w-full max-w-md bg-neutral-200 rounded-full h-3 mt-8">
+          </div>
 
-        <div
+        </div>
 
-          className="bg-black h-3 rounded-full transition-all duration-700"
+        <div className="mt-10 space-y-4">
 
-          style={{
+          {steps.map((step, index) => {
 
-            width:`${
-              ((step+1)/messages.length)*100
-            }%`
+            const done =
+              index < currentStep;
 
-          }}
+            const active =
+              index === currentStep;
 
-        />
+            return (
 
-      </div>
+              <motion.div
+                key={step}
+                layout
+                className="flex items-center gap-4"
+              >
+
+                {done ? (
+
+                  <CheckCircle2
+                    size={18}
+                    className="text-green-500"
+                  />
+
+                ) : active ? (
+
+                  <LoaderCircle
+                    size={18}
+                    className="animate-spin text-blue-400"
+                  />
+
+                ) : (
+
+                  <div className="h-4 w-4 rounded-full border border-zinc-600" />
+
+                )}
+
+                <AnimatePresence mode="wait">
+
+                  <motion.span
+                    key={`${step}-${active}`}
+                    initial={{
+                      opacity: 0,
+                    }}
+                    animate={{
+                      opacity: active
+                        ? [0.5, 1, 0.5]
+                        : 1,
+                    }}
+                    transition={{
+                      duration: 1.2,
+                      repeat: active
+                        ? Infinity
+                        : 0,
+                    }}
+                    className={
+                      done
+                        ? "text-zinc-400"
+                        : active
+                        ? "text-white"
+                        : "text-zinc-600"
+                    }
+                  >
+
+                    {step}
+
+                    {active &&
+                      !completed &&
+                      "..."}
+
+                  </motion.span>
+
+                </AnimatePresence>
+
+              </motion.div>
+
+            );
+
+          })}
+
+        </div>
+
+      </motion.div>
 
     </div>
-
   );
+};
 
-}
+export default Loader;

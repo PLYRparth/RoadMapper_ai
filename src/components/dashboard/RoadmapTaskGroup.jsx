@@ -76,15 +76,22 @@ const RoadmapTaskGroup = ({
             {/* Header */}
 
             <div className="mb-5">
-
-                <h2 className="text-xl font-semibold">
+                <p className="text-xs uppercase tracking-wider text-zinc-500">
                     {roadmap.goal}
-                </h2>
-
-                <p className="mt-1 text-sm text-neutral-500">
-                    Day {day.day} / {roadmap.duration}
                 </p>
 
+                <h3 className="mt-1 text-xl font-semibold text-white">
+                    {day.title}
+                </h3>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                    <span className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-300">
+                        Day {day.day}
+                    </span>
+                    <span className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-300">
+                        {day.tasks.length} Tasks
+                    </span>
+                </div>
             </div>
 
             {/* Progress */}
@@ -101,10 +108,10 @@ const RoadmapTaskGroup = ({
 
                 </div>
 
-                <div className="h-2 overflow-hidden rounded-full bg-neutral-200">
+                <div className="h-3 overflow-hidden rounded-full bg-zinc-800">
 
                     <motion.div
-                        className="h-full rounded-full bg-black"
+                        className="h-full rounded-full bg-white"
                         animate={{
                             width: `${progress}%`,
                         }}
@@ -121,7 +128,7 @@ const RoadmapTaskGroup = ({
 
             <div>
 
-                <h3 className="mb-3 font-medium">
+                <h3 className="mb-5 text-lg font-semibold">
                     Pending
                 </h3>
 
@@ -153,11 +160,25 @@ const RoadmapTaskGroup = ({
                         className="rounded-xl border border-green-300 bg-green-50 p-4 text-green-700"
                     >
 
-                        🎉 Awesome!
+                        <Card
+                            padding="md"
+                            hover={false}
+                            className="border-green-500/30 bg-green-500/10"
+                        >
 
-                        <br />
+                            <h4 className="text-lg font-semibold text-green-400">
 
-                        You've completed all tasks for today.
+                                All tasks completed 🎉
+
+                            </h4>
+
+                            <p className="mt-2 text-sm text-zinc-300">
+
+                                You're ready to unlock the next day.
+
+                            </p>
+
+                        </Card>
 
                     </motion.div>
 
@@ -173,7 +194,7 @@ const RoadmapTaskGroup = ({
                     onClick={() =>
                         setExpanded(!expanded)
                     }
-                    className="flex w-full items-center justify-between rounded-xl border border-neutral-200 px-4 py-3 hover:bg-neutral-50"
+                    className="flex w-full items-center justify-between rounded-xl border border-zinc-800 px-4 py-4 hover:bg-zinc-900"
                 >
 
                     <span>
@@ -257,15 +278,13 @@ const RoadmapTaskGroup = ({
             {/* Complete Day */}
 
             <Button
-                className="mt-6"
+                className="mt-8 w-full"
                 disabled={pending.length > 0}
                 onClick={handleCompleteDay}
             >
-
                 {pending.length > 0
-                    ? "Finish Pending Tasks"
+                    ? `${pending.length} Task${pending.length > 1 ? "s" : ""} Remaining`
                     : "Complete Day →"}
-
             </Button>
 
         </Card>

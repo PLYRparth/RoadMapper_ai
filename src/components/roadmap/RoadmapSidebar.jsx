@@ -5,329 +5,333 @@ import Button from "../ui/Button";
 import TaskItem from "./TaskItem";
 
 import {
-  completeDay,
-  completeTask,
-  getDayStatus,
-  saveNotes,
+    completeDay,
+    completeTask,
+    getDayStatus,
+    saveNotes,
 } from "../../utils/roadmap";
 
 const RoadmapSidebar = ({
-  roadmap,
-  selectedDay,
-  refresh,
-}) => {
-  const [notes, setNotes] = useState("");
-
-  useEffect(() => {
-    setNotes(selectedDay.notes || "");
-  }, [selectedDay]);
-
-  const status = getDayStatus(
     roadmap,
-    selectedDay.day - 1
-  );
+    selectedDay,
+    refresh,
+}) => {
+    const [notes, setNotes] = useState("");
 
-  const editable =
-    status === "current";
+    useEffect(() => {
+        setNotes(selectedDay.notes || "");
+    }, [selectedDay]);
 
-  const handleTaskToggle = (
-    taskId
-  ) => {
-
-    completeTask(
-      roadmap.id,
-      selectedDay.day,
-      taskId
+    const status = getDayStatus(
+        roadmap,
+        selectedDay.day - 1
     );
 
-    refresh();
+    const tasksEditable =
+        status === "current";
 
-  };
+    const notesEditable =
+        status === "current" ||
+        status === "completed";
 
-  const handleSaveNotes = () => {
+    const handleTaskToggle = (
+        taskId
+    ) => {
 
-    saveNotes(
-      roadmap.id,
-      selectedDay.day,
-      notes
-    );
+        completeTask(
+            roadmap.id,
+            selectedDay.day,
+            taskId
+        );
 
-    toast.success(
-      "Notes saved."
-    );
+        refresh();
 
-    refresh();
+    };
 
-  };
+    const handleSaveNotes = () => {
 
-  const handleCompleteDay = () => {
+        saveNotes(
+            roadmap.id,
+            selectedDay.day,
+            notes
+        );
 
-    const result =
-      completeDay(roadmap.id);
+        toast.success(
+            "Notes saved."
+        );
 
-    if(!result.success){
+        refresh();
 
-      toast.error(
-        result.message
-      );
+    };
 
-      return;
+    const handleCompleteDay = () => {
 
-    }
+        const result =
+            completeDay(roadmap.id);
 
-    toast.success(
-      "Next day unlocked 🚀"
-    );
+        if (!result.success) {
 
-    refresh();
+            toast.error(
+                result.message
+            );
 
-  };
+            return;
 
-  return (
+        }
 
-    <div className="sticky top-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        toast.success(
+            "Next day unlocked 🚀"
+        );
 
-      <div className="mb-6">
+        refresh();
 
-        <div className="flex items-center justify-between">
+    };
 
-          <h2 className="text-2xl font-bold">
+    return (
 
-            Day {selectedDay.day}
+        <div className="sticky top-6 rounded-3xl border border-zinc-800 bg-[#18181B] p-8 shadow-2xl">
 
-          </h2>
+            <div className="mb-6">
 
-          <span className="rounded-full bg-neutral-100 px-3 py-1 text-sm">
+                <div className="flex items-center justify-between">
 
-            {status}
+                    <h2 className="text-2xl font-bold">
 
-          </span>
+                        Day {selectedDay.day}
 
-        </div>
+                    </h2>
 
-        <h3 className="mt-2 text-lg font-semibold">
+                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${status === "completed" ? "bg-green-500/20 text-green-400" : status === "current" ? "bg-blue-500/20 text-blue-400" : "bg-zinc-800 text-zinc-500"}`}>
 
-          {selectedDay.title}
+                        {status}
 
-        </h3>
+                    </span>
 
-      </div>
+                </div>
 
-      <section className="mb-6">
+                <h3 className="mt-2 text-lg font-semibold">
 
-        <h4 className="mb-2 font-semibold">
+                    {selectedDay.title}
 
-          Description
+                </h3>
 
-        </h4>
+            </div>
 
-        <p className="text-neutral-600">
+            <section className="mb-6">
 
-          {selectedDay.description}
+                <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">
 
-        </p>
+                    Description
 
-      </section>
+                </h4>
 
-      <section className="mb-6">
+                <p className="leading-7 text-zinc-300">
 
-        <h4 className="mb-2 font-semibold">
+                    {selectedDay.description}
 
-          Focus
+                </p>
 
-        </h4>
+            </section>
 
-        <ul className="list-disc space-y-1 pl-5">
+            <section className="mb-6">
 
-          {
+                <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">
 
-            selectedDay.focus.map(item=>(
+                    Focus
 
-              <li key={item}>
+                </h4>
 
-                {item}
+                <ul className="list-disc space-y-1 pl-5">
 
-              </li>
+                    {
 
-            ))
+                        selectedDay.focus.map(item => (
 
-          }
+                            <li className="text-zinc-300" key={item}>
 
-        </ul>
+                                {item}
 
-      </section>
+                            </li>
 
-      <section className="mb-6">
+                        ))
 
-        <h4 className="mb-2 font-semibold">
+                    }
 
-          Resources
+                </ul>
 
-        </h4>
+            </section>
 
-        <ul className="space-y-2">
+            <section className="mb-6">
 
-          {
+                <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">
 
-            selectedDay.resources.map(resource=>(
+                    Resources
 
-              <li key={resource}>
+                </h4>
 
-                🔍 {resource}
+                <ul className="space-y-2">
 
-              </li>
+                    {
 
-            ))
+                        selectedDay.resources.map(resource => (
 
-          }
+                            <li className="text-zinc-300" key={resource}>
 
-        </ul>
+                                🔍 {resource}
 
-      </section>
+                            </li>
 
-      <section className="mb-6">
+                        ))
 
-        <h4 className="mb-3 font-semibold">
+                    }
 
-          Tasks
+                </ul>
 
-        </h4>
+            </section>
 
-        <div className="space-y-3">
+            <section className="mb-6">
 
-          {
+                <h4 className="mb-3 font-semibold">
 
-            selectedDay.tasks.map(task=>(
+                    Tasks
 
-              <TaskItem
+                </h4>
 
-                key={task.id}
+                <div className="space-y-3">
 
-                task={task}
+                    {
 
-                onToggle={()=>
-                  editable &&
-                  handleTaskToggle(
-                    task.id
-                  )
-                }
+                        selectedDay.tasks.map(task => (
 
-              />
+                            <TaskItem
 
-            ))
+                                key={task.id}
 
-          }
+                                task={task}
 
-        </div>
+                                onToggle={() =>
+                                    tasksEditable &&
+                                    handleTaskToggle(
+                                        task.id
+                                    )
+                                }
 
-      </section>
+                            />
 
-      <section className="mb-6">
+                        ))
 
-        <h4 className="mb-2 font-semibold">
+                    }
 
-          Challenge
+                </div>
 
-        </h4>
+            </section>
 
-        <p>
+            <section className="mb-6">
 
-          {selectedDay.challenge}
+                <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">
 
-        </p>
+                    Challenge
 
-      </section>
+                </h4>
 
-      <section className="mb-6">
+                <p className="leading-7 text-zinc-300">
 
-        <h4 className="mb-2 font-semibold">
+                    {selectedDay.challenge}
 
-          Reflection
+                </p>
 
-        </h4>
+            </section>
 
-        <p>
+            <section className="mb-6">
 
-          {selectedDay.reflection}
+                <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">
 
-        </p>
+                    Reflection
 
-      </section>
+                </h4>
 
-      <section className="mb-6">
+                <p className="leading-7 text-zinc-300">
 
-        <h4 className="mb-2 font-semibold">
+                    {selectedDay.reflection}
 
-          Notes
+                </p>
 
-        </h4>
+            </section>
 
-        <textarea
+            <section className="mb-6">
 
-          rows={5}
+                <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">
 
-          value={notes}
+                    Notes
 
-          disabled={!editable}
+                </h4>
 
-          onChange={(e)=>
-            setNotes(
-              e.target.value
-            )
-          }
+                <textarea
 
-          className="w-full rounded-xl border border-neutral-300 p-3"
+                    rows={5}
 
-        />
+                    value={notes}
 
-      </section>
+                    disabled={!notesEditable}
 
-      {
+                    onChange={(e) =>
+                        setNotes(
+                            e.target.value
+                        )
+                    }
 
-        editable && (
+                    className=" w-full rounded-2xl border border-zinc-700 bg-zinc-900 p-4 text-white placeholder:text-zinc-500 focus:border-white focus:outline-none disabled:opacity-60"
 
-          <>
+                />
 
-            <Button
-              onClick={
-                handleSaveNotes
-              }
-            >
+            </section>
 
-              Save Notes
+            {
 
-            </Button>
+                tasksEditable &&  (
 
-            <Button
+                    <>
 
-              className="mt-3"
+                        <Button
+                            onClick={
+                                handleSaveNotes
+                            }
+                        >
 
-              disabled={
-                selectedDay.tasks.some(
-                  task=>
-                    !task.isCompleted
+                            Save Notes
+
+                        </Button>
+
+                        <Button
+
+                            className="mt-3"
+
+                            disabled={
+                                selectedDay.tasks.some(
+                                    task =>
+                                        !task.isCompleted
+                                )
+                            }
+
+                            onClick={
+                                handleCompleteDay
+                            }
+
+                        >
+
+                            Complete Day →
+
+                        </Button>
+
+                    </>
+
                 )
-              }
 
-              onClick={
-                handleCompleteDay
-              }
+            }
 
-            >
+        </div>
 
-              Complete Day →
-
-            </Button>
-
-          </>
-
-        )
-
-      }
-
-    </div>
-
-  );
+    );
 
 };
 

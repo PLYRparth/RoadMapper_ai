@@ -1,42 +1,51 @@
-import clsx from "clsx";
-
 const Button = ({
-    children,
-    onClick,
-    type = "button",
-    variant = "primary",
-    disabled = false,
-    className = "",
+  children,
+  className = "",
+  variant = "primary",
+  ...props
 }) => {
+  const styles = {
+    primary:
+      "bg-white text-black hover:bg-zinc-200",
 
-    return (
+    secondary:
+      "border border-zinc-700 bg-zinc-900 text-white hover:bg-zinc-800",
 
-        <button
-            type={type}
-            disabled={disabled}
-            onClick={onClick}
-            className={clsx(
+    danger:
+      "bg-red-500 text-white hover:bg-red-600",
+  };
 
-                "w-full rounded-xl px-5 py-3 text-sm font-medium transition-all duration-200",
+  return (
+    <button
+      {...props}
+      className={`
+        inline-flex
+        items-center
+        justify-center
 
-                variant === "primary" &&
-                    "bg-black text-white hover:bg-neutral-800",
+        rounded-2xl
 
-                variant === "secondary" &&
-                    "border border-neutral-300 bg-white hover:bg-neutral-100",
+        px-12
+        py-8.5
+        text-sm
+        font-semibold
 
-                disabled &&
-                    "cursor-not-allowed opacity-60",
+        transition-all
+        duration-200
 
-                className
-            )}
-        >
+        hover:scale-[1.02]
+        active:scale-[0.98]
 
-            {children}
+        disabled:cursor-not-allowed
+        disabled:opacity-50
 
-        </button>
-
-    );
+        ${styles[variant]}
+        ${className}
+      `}
+    >
+      {children}
+    </button>
+  );
 };
 
 export default Button;

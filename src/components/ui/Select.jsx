@@ -21,7 +21,23 @@ const Select = ({
 
                 onChange={onChange}
 
-                className="w-full rounded-xl border border-neutral-300 px-4 py-3"
+                className="w-full
+          rounded-2xl
+          border
+          border-zinc-700
+          bg-zinc-900
+          px-4
+          py-3
+
+          text-white
+          placeholder:text-zinc-500
+
+          transition-all
+
+          focus:border-white
+          focus:outline-none
+          focus:ring-2
+          focus:ring-white/10"
 
             >
 

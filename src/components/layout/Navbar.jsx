@@ -1,30 +1,59 @@
-import { Map } from "lucide-react";
+import {
+  NavLink,
+} from "react-router";
 
 const Navbar = () => {
 
-    return (
+  return (
 
-        <header className="border-b bg-white">
+    <header className="sticky top-0 z-50 border-b border-zinc-800 bg-[#09090bcc] backdrop-blur-xl">
 
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-6 lg:px-10">
 
-                <div className="flex items-center gap-2">
+        <NavLink
+          to="/dashboard"
+          className="text-2xl font-bold tracking-tight tracking-tight"
+        >
 
-                    <Map size={22} />
+          Roadmapper AI
 
-                    <h1 className="text-lg font-semibold">
+        </NavLink>
 
-                        Roadmapper AI
+        <nav className="flex items-center gap-8">
 
-                    </h1>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive
+                ? "rounded-xl px-4 py-2 transition-all hover:bg-zinc-800"
+                : "text-zinc-400 hover:rounded-xl px-4 py-2 transition-all hover:bg-zinc-800"
+            }
+          >
 
-                </div>
+            Dashboard
 
-            </div>
+          </NavLink>
 
-        </header>
+          <NavLink
+            to="/settings"
+            className={({ isActive }) =>
+              isActive
+                ? "rounded-xl px-4 py-2 transition-all hover:bg-zinc-800"
+                : "text-zinc-400 hover:rounded-xl px-4 py-2 transition-all hover:bg-zinc-800"
+            }
+          >
 
-    );
+            Settings
+
+          </NavLink>
+
+        </nav>
+
+      </div>
+
+    </header>
+
+  );
 
 };
 
