@@ -6,7 +6,7 @@ const Input = ({
   type = "text",
 }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2.5">
       <label className="text-sm font-medium text-zinc-300">
         {label}
       </label>
@@ -17,23 +17,26 @@ const Input = ({
         onChange={onChange}
         placeholder={placeholder}
         className="
+          min-h-11
           w-full
-          rounded-2xl
+          rounded-md
           border
-          border-zinc-700
-          bg-zinc-900
+          border-white/10
+          bg-white/[0.035]
           px-4
-          py-3
+          py-2.5
 
           text-white
           placeholder:text-zinc-500
 
           transition-all
+          duration-200
 
-          focus:border-white
+          hover:border-white/20
+          focus:border-white/40
           focus:outline-none
           focus:ring-2
-          focus:ring-white/10
+          focus:ring-white/[0.08]
         "
       />
     </div>

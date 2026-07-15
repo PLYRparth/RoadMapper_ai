@@ -113,13 +113,17 @@ export function completeDay(roadmapId) {
         };
     }
 
-    day.isCompleted = true;
+    day.completed = true;
+    day.status = "completed";
 
     if (
         roadmap.currentDayIndex <
         roadmap.days.length - 1
     ) {
         roadmap.currentDayIndex++;
+
+        roadmap.days[roadmap.currentDayIndex].status =
+            "current";
     } else {
         roadmap.isCompleted = true;
     }
@@ -170,7 +174,12 @@ export function resetRoadmap(
     roadmap.isCompleted = false;
 
     roadmap.days.forEach((day) => {
-        day.isCompleted = false;
+        day.completed = false;
+
+        day.status =
+            day.day === 1
+                ? "current"
+                : "locked";
 
         day.notes = "";
 
@@ -187,30 +196,26 @@ export function resetRoadmap(
 /**
  * Returns the UI status of a day
  */
-export function getDayStatus(roadmap, dayIndex) {
-  console.log("getDayStatus");
-  console.log(roadmap);
-  console.log(dayIndex);
+export function getDayStatus(
+    roadmap,
+    dayIndex
+) {
+    if (!roadmap?.days)
+        return "locked";
 
-  if (!roadmap?.days) {
-    return "locked";
-  }
+    const day =
+        roadmap.days[dayIndex];
 
-  console.log("Days length:", roadmap.days.length);
+    if (!day)
+        return "locked";
 
-  const day = roadmap.days[dayIndex];
-
-  console.log("Selected day:", day);
-
-  if (!day) {
-    return "locked";
-  }
-
-  if (day.completed) return "completed";
-
-  if (dayIndex === roadmap.currentDayIndex) {
-    return "current";
-  }
-
-  return "locked";
+    return (
+        day.status ??
+        (day.completed
+            ? "completed"
+            : dayIndex ===
+              roadmap.currentDayIndex
+            ? "current"
+            : "locked")
+    );
 }

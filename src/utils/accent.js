@@ -1,0 +1,66 @@
+const accentClassMap = {
+  // blue: {
+  //   bar: "bg-blue-400",
+  //   dot: "bg-blue-400",
+  //   text: "text-blue-300",
+  //   border: "border-blue-400/25",
+  //   borderStrong: "border-blue-400",
+  //   bgSoft: "bg-blue-400/10",
+  //   bgSolid: "bg-blue-500",
+  //   shadow: "shadow-[0_0_18px_rgba(96,165,250,0.18)]",
+  // },
+  purple: {
+    bar: "bg-purple-400",
+    dot: "bg-purple-400",
+    text: "text-purple-300",
+    border: "border-purple-400/25",
+    borderStrong: "border-purple-400",
+    bgSoft: "bg-purple-400/10",
+    bgSolid: "bg-purple-500",
+    shadow: "shadow-[0_0_18px_rgba(192,132,252,0.18)]",
+  },
+  // emerald: {
+  //   bar: "bg-emerald-400",
+  //   dot: "bg-emerald-400",
+  //   text: "text-emerald-300",
+  //   border: "border-emerald-400/25",
+  //   borderStrong: "border-emerald-400",
+  //   bgSoft: "bg-emerald-400/10",
+  //   bgSolid: "bg-emerald-500",
+  //   shadow: "shadow-[0_0_18px_rgba(52,211,153,0.18)]",
+  // },
+  // orange: {
+  //   bar: "bg-orange-400",
+  //   dot: "bg-orange-400",
+  //   text: "text-orange-300",
+  //   border: "border-orange-400/25",
+  //   borderStrong: "border-orange-400",
+  //   bgSoft: "bg-orange-400/10",
+  //   bgSolid: "bg-orange-500",
+  //   shadow: "shadow-[0_0_18px_rgba(251,146,60,0.18)]",
+  // },
+  // pink: {
+  //   bar: "bg-pink-400",
+  //   dot: "bg-pink-400",
+  //   text: "text-pink-300",
+  //   border: "border-pink-400/25",
+  //   borderStrong: "border-pink-400",
+  //   bgSoft: "bg-pink-400/10",
+  //   bgSolid: "bg-pink-500",
+  //   shadow: "shadow-[0_0_18px_rgba(244,114,182,0.18)]",
+  // },
+  // cyan: {
+  //   bar: "bg-cyan-400",
+  //   dot: "bg-cyan-400",
+  //   text: "text-cyan-300",
+  //   border: "border-cyan-400/25",
+  //   borderStrong: "border-cyan-400",
+  //   bgSoft: "bg-cyan-400/10",
+  //   bgSolid: "bg-cyan-500",
+  //   shadow: "shadow-[0_0_18px_rgba(34,211,238,0.18)]",
+  // },
+};
+
+export const getAccentClasses = (accent) => {
+  return accentClassMap[accent] || accentClassMap.purple;
+};

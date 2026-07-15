@@ -12,54 +12,38 @@ import RoadmapHeader from "../components/roadmap/RoadmapHeader";
 import RoadmapTimeline from "../components/roadmap/RoadmapTimeline";
 import RoadmapSidebar from "../components/roadmap/RoadmapSidebar";
 
-import {
-  getRoadmapById,
-} from "../utils/storage";
+import { getRoadmapById } from "../utils/storage";
 
 const Roadmap = () => {
   const { roadmapId } = useParams();
-
   const navigate = useNavigate();
-
   const [searchParams] = useSearchParams();
 
-  const isNewRoadmap =
-    searchParams.get("new") === "true";
+  const isNewRoadmap = searchParams.get("new") === "true";
 
   const [roadmap, setRoadmap] = useState(null);
-
-  const [selectedDay, setSelectedDay] =
-    useState(null);
+  const [selectedDay, setSelectedDay] = useState(null);
 
   const refresh = () => {
-    const updatedRoadmap =
-      getRoadmapById(roadmapId);
+    const updatedRoadmap = getRoadmapById(roadmapId);
 
     setRoadmap(updatedRoadmap);
 
     if (!updatedRoadmap) return;
 
-    // Keep selected day in sync after updates
     if (selectedDay) {
-      const updatedDay =
-        updatedRoadmap.days.find(
-          (day) =>
-            day.day === selectedDay.day
-        );
+      const updatedDay = updatedRoadmap.days.find(
+        (day) => day.day === selectedDay.day
+      );
 
       setSelectedDay(updatedDay);
     } else {
-      setSelectedDay(
-        updatedRoadmap.days[
-          updatedRoadmap.currentDayIndex
-        ]
-      );
+      setSelectedDay(updatedRoadmap.days[updatedRoadmap.currentDayIndex]);
     }
   };
 
   useEffect(() => {
-    const data =
-      getRoadmapById(roadmapId);
+    const data = getRoadmapById(roadmapId);
 
     if (!data) {
       navigate("/dashboard");
@@ -67,17 +51,15 @@ const Roadmap = () => {
     }
 
     setRoadmap(data);
-
-    // Open current day by default
-    setSelectedDay(
-      data.days[data.currentDayIndex]
-    );
-  }, [roadmapId]);
+    setSelectedDay(data.days[data.currentDayIndex]);
+  }, [roadmapId, navigate]);
 
   if (!roadmap || !selectedDay) {
     return (
       <Layout>
-        <p>Loading roadmap...</p>
+        <div className="rounded-xl border border-white/[0.08] bg-[#111113] p-8 text-zinc-400">
+          Loading roadmap...
+        </div>
       </Layout>
     );
   }
@@ -85,51 +67,47 @@ const Roadmap = () => {
   return (
     <Layout>
       {isNewRoadmap && (
-        <div className="mb-8 rounded-2xl border border-green-200 bg-green-50 p-6">
-          <h2 className="text-2xl font-bold">
-            🎉 Your AI roadmap is ready!
-          </h2>
+        <div className="mb-6 rounded-xl border border-emerald-400/20 bg-emerald-400/10 p-5">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-emerald-300/80">
+                Ready
+              </p>
 
-          <p className="mt-2 text-neutral-600">
-            Review your roadmap before
-            starting. Future days are
-            visible, but you'll unlock
-            them one at a time by
-            completing the current day.
-          </p>
+              <h2 className="mt-1.5 text-xl font-semibold tracking-[-0.035em] text-white">
+                Your AI roadmap is ready
+              </h2>
 
-          <Button
-            className="mt-5"
-            onClick={() =>
-              navigate("/dashboard")
-            }
-          >
-            Start My Journey →
-          </Button>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-300">
+                Review your roadmap before starting. Future days are visible, and you will unlock them one at a time by completing the current day.
+              </p>
+            </div>
+
+            <Button onClick={() => navigate("/dashboard")}>
+              Start My Journey
+            </Button>
+          </div>
         </div>
       )}
 
       <RoadmapHeader roadmap={roadmap} />
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-1">
-          <RoadmapTimeline
-            roadmap={roadmap}
-            selectedDay={selectedDay}
-            setSelectedDay={setSelectedDay}
-          />
-        </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
+        <RoadmapTimeline
+          roadmap={roadmap}
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
 
-        <div className="lg:col-span-2">
-          <RoadmapSidebar
-            roadmap={roadmap}
-            selectedDay={selectedDay}
-            refresh={refresh}
-          />
-        </div>
+        <RoadmapSidebar
+          roadmap={roadmap}
+          selectedDay={selectedDay}
+          refresh={refresh}
+        />
       </div>
     </Layout>
   );
 };
 
 export default Roadmap;
+

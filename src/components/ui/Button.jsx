@@ -6,13 +6,13 @@ const Button = ({
 }) => {
   const styles = {
     primary:
-      "bg-white text-black hover:bg-zinc-200",
+      "border border-white bg-white text-black shadow-[0_1px_1px_rgba(0,0,0,0.08)] hover:border-zinc-200 hover:bg-zinc-200",
 
     secondary:
-      "border border-zinc-700 bg-zinc-900 text-white hover:bg-zinc-800",
+      "border border-white/10 bg-white/[0.03] text-white hover:border-white/18 hover:bg-white/[0.07]",
 
     danger:
-      "bg-red-500 text-white hover:bg-red-600",
+      "border border-red-500/70 bg-red-500 text-white hover:bg-red-600",
   };
 
   return (
@@ -20,24 +20,29 @@ const Button = ({
       {...props}
       className={`
         inline-flex
+        min-h-10
         items-center
         justify-center
+        gap-2
 
-        rounded-2xl
+        rounded-full
 
-        px-12
-        py-8.5
+        px-4
+        py-2
         text-sm
-        font-semibold
+        font-medium
+        leading-5
 
         transition-all
         duration-200
 
-        hover:scale-[1.02]
-        active:scale-[0.98]
+        hover:-translate-y-0.5
+        active:translate-y-0
+        active:scale-[0.99]
 
         disabled:cursor-not-allowed
         disabled:opacity-50
+        disabled:hover:translate-y-0
 
         ${styles[variant]}
         ${className}

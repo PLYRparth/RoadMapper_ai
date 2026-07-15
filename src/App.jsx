@@ -15,8 +15,10 @@ function App() {
           duration: 3000,
           style: {
             borderRadius: "12px",
-            background: "#18181b",
-            color: "#fff",
+            border: "1px solid rgba(255,255,255,0.1)",
+            background: "#111113",
+            color: "#fafafa",
+            boxShadow: "0 16px 40px -20px rgba(0,0,0,0.9)",
           },
         }}
       />
