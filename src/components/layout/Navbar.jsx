@@ -20,7 +20,7 @@ const Navbar = () => {
             </span>
 
             <span className="text-xs text-zinc-500 transition-colors duration-200 group-hover:text-zinc-400">
-              AI Learning Companion
+              From goals to daily progress
             </span>
           </div>
         </NavLink>
