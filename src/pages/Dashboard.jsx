@@ -26,11 +26,10 @@ const Dashboard = () => {
   useEffect(() => {
     const data = getAllRoadmaps().filter((roadmap) => roadmap.status === "active");
 
-    if (data.length === 0) {
+    if (data.length == 0) {
       navigate("/");
       return;
     }
-
     setRoadmaps(data);
   }, [navigate]);
 
